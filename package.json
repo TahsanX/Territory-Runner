@@ -1,0 +1,55 @@
+{
+  "name": "territory-running-app",
+  "version": "2.0.0",
+  "description": "Territory-Based Running and Fitness Tracking Application",
+  "main": "server.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently -k -n css,server -c cyan,green \"npm:dev:css\" \"nodemon server.js\"",
+    "dev:css": "tailwindcss -i ./public/css/tailwind.src.css -o ./public/css/app.css --watch",
+    "build:css": "tailwindcss -i ./public/css/tailwind.src.css -o ./public/css/app.css --minify",
+    "build": "npm run build:css",
+    "postinstall": "npm run build:css",
+    "init-db": "node scripts/init-db.js",
+    "bench": "node scripts/bench.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "running",
+    "fitness",
+    "territory",
+    "gps",
+    "tracking",
+    "postgis"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "@turf/along": "^7.1.0",
+    "@turf/distance": "^7.1.0",
+    "@turf/helpers": "^7.1.0",
+    "@vercel/functions": "^3.11.0",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-validator": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.0",
+    "pino": "^9.4.0",
+    "pino-http": "^10.3.0",
+    "tailwindcss": "^3.4.13"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1",
+    "nodemon": "^3.1.7",
+    "pino-pretty": "^11.2.2"
+  }
+}
