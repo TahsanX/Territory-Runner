@@ -1,0 +1,14 @@
+<%#
+  Server-rendered client config. Only public values: the anon key is
+  RLS-constrained and safe in the browser, the service-role key never is.
+%>
+<script>
+  window.TR_CONFIG = {
+    supabaseUrl: <%- JSON.stringify(supabaseUrl || '') %>,
+    supabaseAnonKey: <%- JSON.stringify(supabaseAnonKey || '') %>,
+    maptilerKey: <%- JSON.stringify(maptilerKey || '') %>,
+    maptilerStyle: <%- JSON.stringify(maptilerStyle || 'streets-v2') %>,
+    enableFacebook: <%- JSON.stringify(Boolean(enableFacebook)) %>,
+    enableGoogle: <%- JSON.stringify(Boolean(enableGoogle)) %>
+  };
+</script>

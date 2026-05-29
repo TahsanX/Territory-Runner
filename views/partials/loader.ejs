@@ -1,0 +1,157 @@
+<%#
+  Full-screen loader. Pick the animation per page:
+    include('partials/loader', { variant: 1 })   1 = flipping blocks
+                                                 2 = splitting discs
+                                                 3 = filling grid
+  Progress and the Ready / Set / Go caption are driven by real page milestones
+  from public/js/loader.js, not by a timer.
+%>
+<% var v = [1, 2, 3].indexOf(Number(locals.variant)) === -1 ? 1 : Number(locals.variant); %>
+<style>
+  /* Self-contained: this must render correctly before app.css has loaded. */
+  #tr-loader {
+    position: fixed; inset: 0; z-index: 90;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.75rem; background: #f8fafc;
+    font-family: Inter, system-ui, 'Segoe UI', sans-serif;
+    transition: opacity .32s ease, visibility .32s ease;
+  }
+  #tr-loader[hidden] { display: none; }
+  #tr-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  /* Fixed-size stage so the bar and caption never shift while the shapes move. */
+  .trl-stage { width: 110px; height: 110px; display: grid; place-items: center; }
+
+<% if (v === 1) { %>
+  #tr-loader { --trl-accent: orange; }
+  .trl-l1 {
+    width: 40px; height: 20px; margin-top: 20px;
+    background: orange; position: relative;
+    animation: trl-l9-0 1.5s infinite linear;
+  }
+  .trl-l1:before, .trl-l1:after {
+    content: ""; position: absolute; background: inherit;
+    bottom: 100%; width: 50%; height: 100%;
+    animation: inherit; animation-name: trl-l9-1;
+  }
+  .trl-l1:before { left: 0; transform-origin: bottom left; --s: -1; }
+  .trl-l1:after  { right: 0; transform-origin: bottom right; }
+  @keyframes trl-l9-0 {
+    0%, 10%  { transform: translateY(0%)    scaleY(1); }
+    49.99%   { transform: translateY(-50%)  scaleY(1); }
+    50%      { transform: translateY(-50%)  scaleY(-1); }
+    90%,100% { transform: translateY(-100%) scaleY(-1); }
+  }
+  @keyframes trl-l9-1 {
+    10%, 90% { transform: rotate(0deg); }
+    50%      { transform: rotate(calc(var(--s, 1) * 180deg)); }
+  }
+<% } else if (v === 2) { %>
+  #tr-loader { --trl-accent: #f03355; }
+  .trl-l2 { width: 50px; aspect-ratio: 1; display: grid; }
+  .trl-l2:before, .trl-l2:after {
+    content: ""; grid-area: 1/1; border-radius: 50%; background: #f03355;
+    -webkit-mask: repeating-linear-gradient(#000 0 5px, #0000 0 10px);
+            mask: repeating-linear-gradient(#000 0 5px, #0000 0 10px);
+    animation: trl-l35 1.5s infinite;
+  }
+  .trl-l2:after {
+    -webkit-mask: repeating-linear-gradient(#0000 0 5px, #000 0 10px);
+            mask: repeating-linear-gradient(#0000 0 5px, #000 0 10px);
+    --s: -1;
+  }
+  @keyframes trl-l35 {
+    0%, 10%   { transform: translate(0) rotate(0); }
+    35%       { transform: translate(calc(var(--s, 1) * 50%)) rotate(0); }
+    66%       { transform: translate(calc(var(--s, 1) * 50%)) rotate(calc(var(--s, 1) * 180deg)); }
+    90%, 100% { transform: translate(0) rotate(calc(var(--s, 1) * 180deg)); }
+  }
+<% } else { %>
+  #tr-loader { --trl-accent: #F77825; }
+  .trl-l3 {
+    width: 60px; aspect-ratio: 1; display: flex;
+    --c1: linear-gradient(#554236 0 0);
+    --c2: linear-gradient(#F77825 0 0);
+    --s: calc(100%/3) calc(100%/3);
+    background:
+      var(--c1) 0 0,    var(--c2) 50% 0,    var(--c1) 100% 0,
+      var(--c2) 0 50%,                      var(--c2) 100% 50%,
+      var(--c1) 0 100%, var(--c2) 50% 100%, var(--c1) 100% 100%;
+    background-repeat: no-repeat;
+    animation: trl-l8-0 1.5s infinite alternate;
+  }
+  .trl-l3:before {
+    content: ""; width: calc(100%/3); height: calc(100%/3);
+    background: #60B99A;
+    animation: inherit; animation-delay: 0s; animation-name: trl-l8-1;
+  }
+  @keyframes trl-l8-0 {
+    0%, 12.49%   { background-size: var(--s), 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    12.5%, 24.9% { background-size: var(--s), var(--s), 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    25%, 37.4%   { background-size: var(--s), var(--s), var(--s), 0 0, 0 0, 0 0, 0 0, 0 0; }
+    37.5%, 49.9% { background-size: var(--s), var(--s), var(--s), 0 0, var(--s), 0 0, 0 0, 0 0; }
+    50%, 61.4%   { background-size: var(--s), var(--s), var(--s), 0 0, var(--s), 0 0, 0 0, var(--s); }
+    62.5%, 74.9% { background-size: var(--s), var(--s), var(--s), 0 0, var(--s), 0 0, var(--s), var(--s); }
+    75%, 86.4%   { background-size: var(--s), var(--s), var(--s), 0 0, var(--s), var(--s), var(--s), var(--s); }
+    87.5%, 100%  { background-size: var(--s), var(--s), var(--s), var(--s), var(--s), var(--s), var(--s), var(--s); }
+  }
+  @keyframes trl-l8-1 {
+    0%, 5%    { transform: translate(0, 0); }
+    12.5%     { transform: translate(100%, 0); }
+    25%       { transform: translate(200%, 0); }
+    37.5%     { transform: translate(200%, 100%); }
+    50%       { transform: translate(200%, 200%); }
+    62.5%     { transform: translate(100%, 200%); }
+    75%       { transform: translate(0, 200%); }
+    87.5%     { transform: translate(0, 100%); }
+    95%, 100% { transform: translate(100%, 100%); }
+  }
+<% } %>
+
+  .trl-track {
+    width: 200px; height: 6px; border-radius: 999px;
+    background: #e2e8f0; overflow: hidden;
+  }
+  .trl-bar {
+    height: 100%; width: 0%; border-radius: 999px;
+    background: var(--trl-accent);
+    transition: width .35s cubic-bezier(.16,1,.3,1);
+  }
+
+  .trl-caption {
+    font-size: 1.125rem; font-weight: 700; color: #334155;
+    letter-spacing: .04em; text-transform: uppercase; min-height: 1.5rem;
+  }
+  .trl-caption.is-pop { animation: trl-pop .3s ease-out; }
+  @keyframes trl-pop {
+    0%   { transform: scale(.85); opacity: .4; }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+
+  .trl-brand {
+    position: absolute; top: 1.75rem;
+    font-size: .6875rem; font-weight: 600; letter-spacing: .14em;
+    text-transform: uppercase; color: #94a3b8;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .trl-l1, .trl-l1:before, .trl-l1:after,
+    .trl-l2:before, .trl-l2:after,
+    .trl-l3, .trl-l3:before,
+    .trl-caption.is-pop { animation: none; }
+    .trl-bar { transition: none; }
+  }
+</style>
+
+<div id="tr-loader" role="status" aria-live="polite" aria-label="Loading Territory Runner">
+  <span class="trl-brand">Territory Runner</span>
+
+  <div class="trl-stage" aria-hidden="true">
+    <div class="trl-l<%= v %>"></div>
+  </div>
+
+  <div class="trl-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <div class="trl-bar" id="tr-loader-bar"></div>
+  </div>
+  <p class="trl-caption" id="tr-loader-caption">Ready</p>
+</div>

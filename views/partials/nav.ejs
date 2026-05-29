@@ -1,0 +1,36 @@
+<%#
+  Single navigation bar. Previously duplicated byte-for-byte between home.ejs
+  and leaderboard.ejs, and absent from the run page.
+  `active` is passed by each page so the current link is marked.
+%>
+<header class="navbar">
+  <nav class="nav-inner" aria-label="Main">
+    <a href="/" class="nav-brand">
+      <img src="/img/favicon.svg" width="28" height="28" alt="" class="shrink-0">
+      Territory&nbsp;Runner
+    </a>
+
+    <div class="nav-links">
+      <a href="/"            class="nav-link <%= active === 'home' ? 'nav-link-active' : '' %>">Dashboard</a>
+      <a href="/run"         class="nav-link <%= active === 'run' ? 'nav-link-active' : '' %>">Run</a>
+      <a href="/summary"     class="nav-link <%= active === 'summary' ? 'nav-link-active' : '' %>">Summary</a>
+      <a href="/leaderboard" class="nav-link <%= active === 'leaderboard' ? 'nav-link-active' : '' %>">Leaderboard</a>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <span id="nav-username" class="hidden text-sm font-medium text-ink-600 sm:inline"></span>
+      <button type="button" id="logout-btn" class="btn-ghost text-sm">Sign out</button>
+    </div>
+  </nav>
+
+  <!-- Mobile: the links move below the bar rather than into a hamburger,
+       since there are only four of them. -->
+  <div class="border-t border-ink-200 bg-white sm:hidden">
+    <div class="shell flex gap-1 overflow-x-auto py-1.5 no-scrollbar">
+      <a href="/"            class="nav-link whitespace-nowrap <%= active === 'home' ? 'nav-link-active' : '' %>">Dashboard</a>
+      <a href="/run"         class="nav-link whitespace-nowrap <%= active === 'run' ? 'nav-link-active' : '' %>">Run</a>
+      <a href="/summary"     class="nav-link whitespace-nowrap <%= active === 'summary' ? 'nav-link-active' : '' %>">Summary</a>
+      <a href="/leaderboard" class="nav-link whitespace-nowrap <%= active === 'leaderboard' ? 'nav-link-active' : '' %>">Leaderboard</a>
+    </div>
+  </div>
+</header>

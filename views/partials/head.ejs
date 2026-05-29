@@ -1,0 +1,17 @@
+<%#
+  Shared document head. The old build repeated this block verbatim in all five
+  templates, and views/run.ejs omitted the main stylesheet entirely, which left
+  the whole run page falling back to browser defaults.
+%>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f8fafc">
+<meta name="description" content="Capture territory by running closed loops. Track distance, streaks and the ground you hold.">
+<title><%= typeof title !== 'undefined' ? title + ' · Territory Runner' : 'Territory Runner' %></title>
+
+<link rel="icon" href="/img/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="/css/app.css">
