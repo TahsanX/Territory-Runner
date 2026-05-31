@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/loader', { variant: 3 }) %>
+  <%- include('partials/nav', { active: 'leaderboard' }) %>
+
+  <main class="shell py-6">
+
+    <section class="section">
+      <h1 class="page-title">Leaderboard</h1>
+      <p class="page-sub">
+        Ranked by the ground you hold, or the distance you have covered.
+      </p>
+    </section>
+
+    <!-- Your position ---------------------------------------------------- -->
+    <section class="section">
+      <div class="card card-pad text-center sm:text-left" id="your-rank" hidden></div>
+    </section>
+
+    <!-- Table ------------------------------------------------------------ -->
+    <section class="section">
+      <div class="card overflow-hidden">
+        <div class="px-4 pt-3 sm:px-5">
+          <div class="tabs" role="tablist">
+            <button type="button" class="tab tab-active" data-metric="area"
+                    role="tab" aria-selected="true">Territory</button>
+            <button type="button" class="tab" data-metric="distance"
+                    role="tab" aria-selected="false">Distance</button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Runner</th>
+                <th scope="col" id="metric-header">Territory</th>
+                <th scope="col" id="metric-alt-header">Distance</th>
+                <th scope="col">Runs</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-body">
+              <tr><td colspan="5" class="px-4 py-3"><div class="skeleton h-5 w-full"></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/config') %>
+
+  <script src="/js/loader.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/leaderboard.js"></script>
+</body>
+</html>

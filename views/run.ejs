@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw=="
+        crossorigin="">
+</head>
+<body class="overflow-hidden sm:overflow-auto">
+  <%- include('partials/loader', { variant: 2 }) %>
+  <%- include('partials/nav', { active: 'run' }) %>
+
+  <main class="shell py-4 sm:py-6">
+
+    <div class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_19rem]">
+
+      <!-- Map ------------------------------------------------------------ -->
+      <section class="lg:order-1">
+        <div class="card overflow-hidden">
+          <div id="run-map" class="h-[48vh] w-full sm:h-[56vh] lg:h-[calc(100vh-11rem)]"></div>
+        </div>
+      </section>
+
+      <!-- Control panel -------------------------------------------------- -->
+      <section class="lg:order-2 lg:sticky lg:top-[calc(var(--header-h)+1.5rem)] lg:self-start">
+
+        <div class="card card-pad">
+          <div class="mb-3 flex items-center justify-between">
+            <h1 class="text-base font-semibold">Live run</h1>
+            <span class="badge badge-neutral" id="run-state">Ready</span>
+          </div>
+
+          <!-- GPS quality. The old UI never surfaced this, so a run recording
+               nothing looked identical to one recording perfectly. -->
+          <div class="mb-4 rounded border border-ink-200 bg-ink-50 px-3 py-2">
+            <div class="flex items-center justify-between gap-2">
+              <span class="gps-pill gps-unknown" id="gps-status">Acquiring…</span>
+              <span class="numeric text-[0.7rem] text-ink-400">
+                <span id="point-count">0</span> pts
+              </span>
+            </div>
+            <p class="mt-1 text-[0.7rem] text-ink-500" id="gps-detail"></p>
+          </div>
+
+          <dl class="grid grid-cols-2 gap-3">
+            <div>
+              <dt class="stat-label">Distance</dt>
+              <dd class="stat-value"><span id="stat-distance">0.00</span><span class="stat-unit">km</span></dd>
+            </div>
+            <div>
+              <dt class="stat-label">Time</dt>
+              <dd class="stat-value numeric" id="stat-time">00:00</dd>
+            </div>
+            <div>
+              <dt class="stat-label">Pace</dt>
+              <dd class="numeric text-lg font-semibold text-ink-800" id="stat-pace">—</dd>
+            </div>
+            <div>
+              <dt class="stat-label">Calories</dt>
+              <dd class="numeric text-lg font-semibold text-ink-800" id="stat-calories">0</dd>
+            </div>
+          </dl>
+
+          <div class="mt-4 flex flex-col gap-2">
+            <button type="button" id="btn-start" class="btn-primary btn-lg btn-block">Start run</button>
+            <div class="flex gap-2">
+              <button type="button" id="btn-pause" class="btn-warning btn-lg flex-1" hidden>Pause</button>
+              <button type="button" id="btn-finish" class="btn-danger btn-lg flex-1" hidden>Finish</button>
+            </div>
+            <button type="button" id="btn-follow" class="btn-secondary text-sm" aria-pressed="true">
+              Map is following you
+            </button>
+          </div>
+
+          <p class="mt-3 border-t border-ink-100 pt-3 text-xs text-ink-500">
+            Finish within 50&nbsp;m of where you started to close the loop and
+            claim the enclosed area.
+          </p>
+        </div>
+
+        <!-- Result lands here after finishing -->
+        <div class="mt-4" id="run-result"></div>
+
+        <!-- Honest about a real browser limitation, rather than losing the
+             run silently. Background tracking is the Phase 2 mobile app. -->
+        <p class="mt-4 px-1 text-[0.7rem] leading-relaxed text-ink-400">
+          Keep this tab open and the screen awake. Browsers suspend GPS when a
+          tab is hidden, so part of your route can be lost if you switch away.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/config') %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+          integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g=="
+          crossorigin=""></script>
+  <script src="/js/loader.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/shared/gps-filter.js"></script>
+  <script src="/js/map-config.js"></script>
+  <script src="/js/territory-layer.js"></script>
+  <script src="/js/run.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        integrity="sha512-h9FcoyWjHcOcmEVkxOfTLnmZFWIH0iZhZT1H2TbOq55xssQGEJHEaIm+PgoUaZbRvQTNTluNOEfb1ZRy6D3BOw=="
+        crossorigin="">
+</head>
+<body>
+  <%- include('partials/loader', { variant: 1 }) %>
+  <%- include('partials/nav', { active: 'home' }) %>
+
+  <main class="shell py-6">
+
+    <!-- Hero ------------------------------------------------------------- -->
+    <section class="section">
+      <div class="card card-pad flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 class="page-title">
+            Welcome back<span id="greeting-name-wrap">, <span id="greeting-name">runner</span></span>
+          </h1>
+          <p class="page-sub">
+            Close a loop on your run to claim the ground inside it. Run over
+            someone else's territory and that overlap becomes yours.
+          </p>
+        </div>
+        <a href="/run" class="btn-primary btn-lg shrink-0">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M6 4l10 6-10 6V4z"/>
+          </svg>
+          Start a run
+        </a>
+      </div>
+    </section>
+
+    <!-- Lifetime stats --------------------------------------------------- -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">Lifetime</h2>
+      </div>
+      <div class="stat-grid">
+        <div class="stat">
+          <p class="stat-label">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 19c0-3 3-4 7-4s7-1 7-4-3-4-7-4"/>
+              <circle cx="5" cy="19" r="2"/><circle cx="19" cy="7" r="2"/>
+            </svg>
+            Distance
+          </p>
+          <p class="stat-value"><span id="stat-total-distance">0.0</span><span class="stat-unit">km</span></p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/>
+            </svg>
+            Territory held
+          </p>
+          <p class="stat-value" id="stat-total-area">0 m²</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21c3.9 0 7-3 7-6.7 0-3.9-3-5.6-4.4-9.3-.6 2.2-1.8 3.3-3 4.2C9.6 10.6 8 11.9 8 14.3 8 18 9.1 21 12 21z"/>
+            </svg>
+            Calories
+          </p>
+          <p class="stat-value" id="stat-total-calories">0</p>
+        </div>
+        <div class="stat">
+          <p class="stat-label">
+            <svg class="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                 stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="15" cy="4.5" r="1.8"/>
+              <path d="M13 21l-1.5-5.5L8 13l1-5 3.5-1.5L16 9l3 1"/>
+              <path d="M9 8L5.5 9.5 4 13"/>
+            </svg>
+            Runs
+          </p>
+          <p class="stat-value" id="stat-total-runs">0</p>
+        </div>
+      </div>
+      <div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 rounded border
+                  border-ink-200 bg-white px-4 py-2.5 text-xs text-ink-500">
+        <span>Territory rank <strong class="numeric ml-0.5 text-ink-800" id="rank-area">—</strong></span>
+        <span class="hidden h-3 w-px bg-ink-200 sm:block"></span>
+        <span>Distance rank <strong class="numeric ml-0.5 text-ink-800" id="rank-distance">—</strong></span>
+        <a href="/leaderboard"
+           class="ml-auto inline-flex items-center gap-1 font-medium text-accent-600
+                  transition-colors duration-300 ease-base hover:text-accent-700">
+          View leaderboard
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
+
+      <!-- Territory map -------------------------------------------------- -->
+      <section class="section lg:order-2 lg:col-start-2 lg:row-start-1">
+        <div class="section-head">
+          <h2 class="section-title">Streak</h2>
+        </div>
+        <div class="card card-pad">
+          <div id="streak-calendar"></div>
+        </div>
+      </section>
+
+      <section class="section lg:order-1 lg:col-start-1 lg:row-start-1">
+        <div class="section-head">
+          <h2 class="section-title">Your territory</h2>
+          <span class="text-xs text-ink-500">
+            <strong class="text-ink-700" id="territory-count">0</strong> held
+          </span>
+        </div>
+        <div class="card overflow-hidden">
+          <div id="territory-map" class="h-[22rem] w-full sm:h-[26rem]"></div>
+          <div class="flex flex-wrap items-center gap-3 border-t border-ink-200 px-4 py-2.5 text-xs text-ink-500">
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block h-2.5 w-4 rounded-sm border border-own/60 bg-own/30"></span>
+              Yours
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="inline-block h-2.5 w-4 rounded-sm border border-rival/60 bg-rival/25"></span>
+              Claimed by others
+            </span>
+            <span class="ml-auto">Zoom in to see names</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Recent runs ------------------------------------------------------ -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">Recent runs</h2>
+        <a href="/summary" class="text-xs text-accent-600 hover:underline">Monthly summary</a>
+      </div>
+      <div class="card" id="history-list">
+        <div class="px-4 py-3"><div class="skeleton h-12 w-full"></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/config') %>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"
+          integrity="sha512-puJW3E/qXDqYp9IfhAI54BJEaWIfloJ7JWs7OeD5i6ruC9JZL1gERT1wjtwXFlh7CjE7ZJ+/vcRZRkIYIb6p4g=="
+          crossorigin=""></script>
+  <script src="/js/loader.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/map-config.js"></script>
+  <script src="/js/territory-layer.js"></script>
+  <script src="/js/calendar.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>

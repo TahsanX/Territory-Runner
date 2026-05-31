@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <%- include('partials/loader', { variant: 3 }) %>
+  <%- include('partials/nav', { active: 'summary' }) %>
+
+  <main class="shell py-6" id="summary-root" aria-busy="true">
+
+    <!-- Period selector -------------------------------------------------- -->
+    <section class="section">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 class="page-title" id="summary-title">Summary</h1>
+          <p class="page-sub">Everything you covered, captured and lost.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="tabs border-none" role="tablist">
+            <button type="button" class="tab tab-active" data-period="month"
+                    role="tab" aria-selected="true">Month</button>
+            <button type="button" class="tab" data-period="year"
+                    role="tab" aria-selected="false">Year</button>
+          </div>
+          <div class="flex gap-1">
+            <button type="button" id="period-prev" class="btn-secondary px-2 py-1.5" aria-label="Previous period">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 4l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button type="button" id="period-next" class="btn-secondary px-2 py-1.5" aria-label="Next period">
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M8 4l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Headline numbers ------------------------------------------------- -->
+    <section class="section">
+      <div class="stat-grid" id="summary-stats">
+        <div class="skeleton h-24"></div><div class="skeleton h-24"></div>
+        <div class="skeleton h-24"></div><div class="skeleton h-24"></div>
+      </div>
+    </section>
+
+    <div class="grid gap-6 lg:grid-cols-2">
+
+      <!-- Territory gained vs lost ---------------------------------------- -->
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Territory</h2></div>
+        <div class="card card-pad" id="summary-territory">
+          <div class="skeleton h-24"></div>
+        </div>
+      </section>
+
+      <!-- Streak ---------------------------------------------------------- -->
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Streak</h2></div>
+        <div class="card card-pad" id="summary-streak">
+          <div class="skeleton h-24"></div>
+        </div>
+      </section>
+
+      <!-- Battles --------------------------------------------------------- -->
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Territory battles</h2></div>
+        <div id="summary-battles">
+          <div class="skeleton h-24"></div>
+        </div>
+      </section>
+
+      <!-- Ranks ----------------------------------------------------------- -->
+      <section class="section">
+        <div class="section-head"><h2 class="section-title">Leaderboard position</h2></div>
+        <div class="grid grid-cols-2 gap-3" id="summary-ranks">
+          <div class="skeleton h-24"></div><div class="skeleton h-24"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Activity chart --------------------------------------------------- -->
+    <section class="section">
+      <div class="section-head"><h2 class="section-title">Distance over time</h2></div>
+      <div class="card card-pad" id="summary-chart">
+        <div class="skeleton h-32"></div>
+      </div>
+    </section>
+
+    <!-- Most-visited places ---------------------------------------------- -->
+    <section class="section">
+      <div class="section-head">
+        <h2 class="section-title">Places you ran most</h2>
+      </div>
+      <div class="card" id="summary-places">
+        <div class="px-4 py-3"><div class="skeleton h-12"></div></div>
+      </div>
+    </section>
+
+    <!-- Best run --------------------------------------------------------- -->
+    <section class="section">
+      <div class="card card-pad" id="summary-best" hidden></div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+  <%- include('partials/config') %>
+
+  <script src="/js/loader.js"></script>
+  <script src="/js/ui.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/summary.js"></script>
+</body>
+</html>
