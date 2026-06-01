@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="bg-ink-100">
+  <main class="flex min-h-screen flex-col items-center justify-center gap-4 px-4 text-center">
+    <svg width="44" height="44" viewBox="0 0 20 20" fill="none" stroke="#b45309"
+         stroke-width="1.5" aria-hidden="true">
+      <circle cx="10" cy="10" r="8"/>
+      <path d="M10 6v5M10 13.5h.01" stroke-linecap="round"/>
+    </svg>
+    <h1 class="text-xl">Something went wrong</h1>
+    <p class="max-w-sm text-sm text-ink-500">
+      We hit an unexpected error. Your runs and territories are safe — try again
+      in a moment.
+    </p>
+    <div class="mt-2 flex gap-2">
+      <button type="button" class="btn-primary" onclick="window.location.reload()">Try again</button>
+      <a href="/" class="btn-secondary">Dashboard</a>
+    </div>
+  </main>
+</body>
+</html>
