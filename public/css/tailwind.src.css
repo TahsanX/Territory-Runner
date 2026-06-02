@@ -1,0 +1,476 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Territory Runner — design system
+   ==========================================================================
+   shadcn/ui generates React components and this app renders EJS server-side,
+   so its components cannot be used directly. What is borrowed is its visual
+   language: a single neutral scale, one restrained accent, a consistent 0.5rem
+   radius, and definition from subtle borders rather than heavy shadows.
+   ========================================================================== */
+
+@layer base {
+  :root {
+    --header-h: 3.5rem;
+    /* One motion curve for the whole app. */
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-ink-50 text-ink-800 font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv01';
+  }
+
+  /* Headings never leave a single word stranded on the last line; body text
+     avoids the ragged short line that `balance` would cost too much to fix. */
+  h1, h2, h3, h4 {
+    @apply text-ink-900 font-semibold tracking-tight;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Visible focus for keyboard users, which the old CSS had nowhere. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-500 ring-offset-2 ring-offset-white;
+  }
+
+  /* Tabular figures so live run metrics don't jitter as digits change. */
+  .numeric {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+
+  /* ---- Page headings --------------------------------------------------- */
+
+  /* Light-mode heading gradient, text only — backgrounds stay flat.
+     `fit-content` matters: on a full-width block the ramp would be spread
+     across the whole shell and a short heading would read as flat black.
+     Capped at 680px so a long heading still wraps rather than running on. */
+  .page-title {
+    @apply max-w-[680px] text-2xl font-semibold tracking-tight sm:text-3xl;
+    width: fit-content;
+    background: linear-gradient(100deg, #000000 0%, #5a5a5a 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .page-sub {
+    @apply mt-1.5 max-w-[680px] text-sm text-ink-500;
+  }
+
+  /* ---- Layout ---------------------------------------------------------- */
+
+  .shell {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6;
+  }
+
+  /* Every page is built from these: discrete titled sections rather than one
+     undifferentiated column of content. */
+  .section {
+    @apply mb-6;
+  }
+
+  .section-head {
+    @apply mb-3 flex items-end justify-between gap-4;
+  }
+
+  .section-title {
+    @apply text-sm font-semibold uppercase tracking-wider text-ink-500;
+  }
+
+  .card {
+    @apply rounded-lg border border-ink-200 bg-white shadow-card;
+  }
+
+  .card-pad {
+    @apply p-4 sm:p-5;
+  }
+
+  .card-head {
+    @apply flex items-center justify-between gap-3 border-b border-ink-200 px-4 py-3 sm:px-5;
+  }
+
+  /* ---- Navigation ------------------------------------------------------ */
+
+  .navbar {
+    @apply sticky top-0 z-40 border-b border-ink-200 bg-white/90 backdrop-blur;
+  }
+
+  .nav-inner {
+    @apply shell flex h-[var(--header-h)] items-center justify-between gap-4;
+  }
+
+  .nav-brand {
+    @apply flex items-center gap-2 text-[0.95rem] font-semibold text-ink-900;
+  }
+
+  .nav-links {
+    @apply hidden items-center gap-1 sm:flex;
+  }
+
+  .nav-link {
+    @apply rounded px-3 py-1.5 text-sm font-medium text-ink-600
+           transition-colors duration-300 ease-base
+           hover:bg-ink-100 hover:text-ink-900;
+  }
+
+  .nav-link-active {
+    @apply bg-accent-50 text-accent-700 hover:bg-accent-50 hover:text-accent-700;
+  }
+
+  /* ---- Buttons --------------------------------------------------------- */
+
+  /* Press feedback is a transform, not a colour change, so it reads the same
+     on every variant and costs nothing to composite. */
+  .btn {
+    @apply inline-flex select-none items-center justify-center gap-2 rounded
+           border border-transparent px-3.5 py-2 text-sm font-medium
+           transition duration-300 ease-base
+           active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50
+           disabled:active:scale-100;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent-600 text-white hover:bg-accent-700;
+  }
+
+  .btn-secondary {
+    @apply btn border-ink-300 bg-white text-ink-700 hover:bg-ink-50;
+  }
+
+  .btn-ghost {
+    @apply btn text-ink-600 hover:bg-ink-100 hover:text-ink-900;
+  }
+
+  .btn-danger {
+    @apply btn bg-danger text-white hover:brightness-95;
+  }
+
+  .btn-warning {
+    @apply btn bg-warning text-white hover:brightness-95;
+  }
+
+  .btn-lg {
+    @apply px-5 py-2.5 text-[0.95rem];
+  }
+
+  .btn-block {
+    @apply w-full;
+  }
+
+  /* OAuth buttons stay neutral — Google's brand guidelines require its own
+     mark on a white or near-white surface. */
+  .btn-oauth {
+    @apply btn btn-block border-ink-300 bg-white py-2.5 text-ink-800 hover:bg-ink-50;
+  }
+
+  /* ---- Forms ----------------------------------------------------------- */
+
+  .label {
+    @apply mb-1.5 block text-sm font-medium text-ink-700;
+  }
+
+  .input {
+    @apply block w-full rounded border border-ink-300 bg-white px-3 py-2 text-sm
+           text-ink-900 placeholder:text-ink-400
+           focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500;
+  }
+
+  .hint {
+    @apply mt-1.5 text-xs text-ink-500;
+  }
+
+  /* ---- Stats ----------------------------------------------------------- */
+
+  .stat-grid {
+    @apply grid grid-cols-2 gap-3 sm:grid-cols-4;
+  }
+
+  /* The number is the content; the label is scaffolding. Hover lifts the card
+     a single pixel so a grid of them still reads as one plane. */
+  .stat {
+    @apply relative overflow-hidden rounded-lg border border-ink-200 bg-white
+           p-4 transition duration-300 ease-base
+           hover:-translate-y-px hover:border-ink-300 hover:shadow-raised;
+  }
+
+  .stat-label {
+    @apply mb-1.5 flex items-center gap-1.5 text-[0.7rem] font-medium
+           uppercase tracking-wider text-ink-500;
+  }
+
+  .stat-value {
+    @apply text-stat numeric text-ink-900;
+  }
+
+  .stat-unit {
+    @apply ml-0.5 text-sm font-medium text-ink-500;
+  }
+
+  /* Icon slot inside a stat label. Sized to the cap height of the label text. */
+  .stat-icon {
+    @apply h-3.5 w-3.5 shrink-0 text-ink-400;
+  }
+
+  .stat-delta-up { @apply text-xs font-medium text-success; }
+  .stat-delta-down { @apply text-xs font-medium text-danger; }
+
+  /* ---- Tables ---------------------------------------------------------- */
+
+  .table {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .table th {
+    @apply border-b border-ink-200 bg-ink-50 px-4 py-2.5 text-left
+           text-[0.7rem] font-semibold uppercase tracking-wider text-ink-500;
+  }
+
+  .table td {
+    @apply border-b border-ink-100 px-4 py-3 text-ink-700;
+  }
+
+  .table tbody tr {
+    @apply transition-colors duration-300 ease-base;
+  }
+
+  .table tbody tr:hover {
+    @apply bg-ink-50/70;
+  }
+
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  /* Your own row is tinted and carries a left rail. A table row is not a card,
+     so the one-sided rule does not apply — and the rail is what makes the row
+     findable when it sits mid-table. */
+  .row-me {
+    @apply bg-accent-50/60 font-medium;
+    box-shadow: inset 3px 0 0 0 theme('colors.accent.500');
+  }
+
+  /* ---- Leaderboard rank ------------------------------------------------ */
+
+  /* Ranks 1-3 are the only ones worth distinguishing. Everything below is a
+     plain tabular number, so the eye lands on the podium first. */
+  .rank {
+    @apply inline-flex h-7 w-7 items-center justify-center rounded-full
+           text-xs font-semibold numeric;
+  }
+
+  .rank-plain { @apply text-ink-400; }
+  .rank-1 { @apply bg-[#fbbf24]/20 text-[#92610a] ring-1 ring-inset ring-[#fbbf24]/40; }
+  .rank-2 { @apply bg-ink-300/25 text-ink-600 ring-1 ring-inset ring-ink-400/40; }
+  .rank-3 { @apply bg-[#b45309]/10 text-[#8a4208] ring-1 ring-inset ring-[#b45309]/30; }
+
+  /* ---- Tabs ------------------------------------------------------------ */
+
+  .tabs {
+    @apply flex gap-1 border-b border-ink-200;
+  }
+
+  .tab {
+    @apply -mb-px border-b-2 border-transparent px-3.5 py-2 text-sm font-medium
+           text-ink-500 transition-colors duration-300 ease-base
+           hover:text-ink-800;
+  }
+
+  .tab-active {
+    @apply border-accent-600 text-accent-700;
+  }
+
+  /* Initials stand in for a profile picture, which the app does not collect.
+     Hue is derived from the name so it stays stable between loads. */
+  .avatar {
+    @apply inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full
+           text-[0.65rem] font-semibold tracking-wide;
+  }
+
+  /* ---- Badges ---------------------------------------------------------- */
+
+  .badge {
+    @apply inline-flex items-center gap-1 rounded-full border px-2 py-0.5
+           text-[0.7rem] font-medium;
+  }
+
+  .badge-own { @apply border-own/30 bg-own/10 text-own; }
+  .badge-rival { @apply border-rival/30 bg-rival/10 text-rival; }
+  .badge-neutral { @apply border-ink-200 bg-ink-100 text-ink-600; }
+
+  /* ---- Streak calendar ------------------------------------------------- */
+
+  /* Intensity is carried by BOTH fill depth and border weight. Colour alone
+     would fail for anyone with a colour-vision deficiency, and the brief
+     described depth and boldness together anyway. */
+  .cal-grid {
+    @apply grid grid-cols-7 gap-1.5;
+  }
+
+  .cal-dow {
+    @apply pb-1 text-center text-[0.65rem] font-semibold uppercase tracking-wider text-ink-400;
+  }
+
+  .cal-day {
+    @apply relative flex aspect-square items-center justify-center rounded
+           text-xs font-medium transition-all;
+  }
+
+  .cal-0 { @apply border border-ink-200 bg-ink-50 text-ink-400; }
+  .cal-1 { @apply border border-own/30 bg-own/10 text-own; }
+  .cal-2 { @apply border-[1.5px] border-own/45 bg-own/25 text-own; }
+  .cal-3 { @apply border-2 border-own/65 bg-own/45 font-semibold text-white; }
+  .cal-4 { @apply border-2 border-own bg-own font-bold text-white; }
+
+  .cal-empty { @apply aspect-square; }
+  .cal-future { @apply border-dashed opacity-45; }
+  .cal-today { @apply ring-2 ring-accent-500 ring-offset-1; }
+
+  /* ---- Map ------------------------------------------------------------- */
+
+  .map-frame {
+    @apply overflow-hidden rounded-lg border border-ink-200 bg-ink-100;
+  }
+
+  /* Territory name label.
+     The old version was a translucent pill over a translucent polygon over
+     detailed map tiles, which made it effectively unreadable. This is opaque,
+     carries a white ring to survive both pale roads and dark parkland, and is
+     non-interactive so it cannot swallow clicks meant for the polygon. */
+  .territory-label {
+    @apply pointer-events-none whitespace-nowrap rounded bg-ink-900/90 px-1.5 py-0.5
+           text-[0.7rem] font-semibold leading-tight text-white;
+    box-shadow: 0 0 0 1.5px rgb(255 255 255 / 0.9), 0 1px 3px rgb(0 0 0 / 0.3);
+  }
+
+  .gps-pill {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5
+           text-[0.7rem] font-medium;
+  }
+
+  .gps-excellent { @apply border-success/30 bg-success/10 text-success; }
+  .gps-good { @apply border-success/25 bg-success/5 text-success; }
+  .gps-fair { @apply border-warning/30 bg-warning/10 text-warning; }
+  .gps-poor { @apply border-danger/30 bg-danger/10 text-danger; }
+  .gps-unknown { @apply border-ink-200 bg-ink-100 text-ink-500; }
+
+  /* ---- Toasts (replacing three raw alert() calls) ---------------------- */
+
+  .toast-stack {
+    @apply pointer-events-none fixed bottom-4 left-1/2 z-[60] flex w-[calc(100%-2rem)]
+           max-w-sm -translate-x-1/2 flex-col gap-2;
+  }
+
+  .toast {
+    @apply pointer-events-auto flex items-start gap-2.5 rounded-lg border
+           border-ink-200 bg-white px-3.5 py-3 text-sm shadow-overlay
+           animate-toast-in;
+  }
+
+  /* Status reads from a leading dot rather than a coloured left edge: a card
+     border is all four sides or none. */
+  .toast::before {
+    @apply mt-1.5 h-2 w-2 shrink-0 rounded-full bg-ink-300;
+    content: '';
+  }
+
+  .toast-success::before { @apply bg-success; }
+  .toast-error::before { @apply bg-danger; }
+  .toast-info::before { @apply bg-accent-500; }
+
+  /* ---- Misc ------------------------------------------------------------ */
+
+  .empty-state {
+    @apply flex flex-col items-center gap-2 px-4 py-10 text-center;
+  }
+
+  .empty-title { @apply text-sm font-medium text-ink-700; }
+  .empty-text { @apply max-w-xs text-xs text-ink-500; }
+
+  .skeleton {
+    @apply animate-pulse rounded bg-ink-200;
+  }
+
+  .divide-rows > * + * {
+    @apply border-t border-ink-100;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Scroll reveal. The element is hidden only once the observer has claimed
+     it, so with JS disabled or before the script runs the content is visible
+     rather than permanently blank. */
+  .reveal-armed {
+    @apply opacity-0;
+    transform: translateY(32px);
+  }
+
+  .reveal-in {
+    @apply animate-reveal;
+  }
+}
+
+/* ==========================================================================
+   Leaflet overrides — the library ships its own opinionated chrome
+   ========================================================================== */
+
+.leaflet-container {
+  font-family: inherit;
+  background: #eef1f5;
+}
+
+.leaflet-control-attribution {
+  font-size: 10px !important;
+  background: rgb(255 255 255 / 0.8) !important;
+}
+
+.leaflet-bar {
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.1) !important;
+}
+
+.leaflet-bar a {
+  color: #334155 !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem !important;
+  box-shadow: 0 12px 32px -8px rgb(15 23 42 / 0.22) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0.75rem 0.875rem !important;
+  font-size: 0.8125rem !important;
+  line-height: 1.5 !important;
+}
+
+/* The runner position marker is an inline SVG, not Leaflet's default blue
+   teardrop (which the old code hardcoded cdnjs URLs for, twice). */
+.runner-marker {
+  display: grid;
+  place-items: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
