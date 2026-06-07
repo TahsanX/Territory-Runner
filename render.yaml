@@ -1,0 +1,68 @@
+# Render Blueprint. In the Render dashboard: New -> Blueprint -> pick this repo,
+# and the service below is created with these settings already applied.
+#
+# Secrets are marked `sync: false`, which means Render prompts for them on first
+# deploy and never stores them in git. Fill each from your local .env.
+
+services:
+  - type: web
+    name: territory-runner
+    runtime: node
+    plan: free
+    region: singapore          # closest Render region to Bangladesh
+    branch: main
+
+    # `npm ci` alone is enough: tailwindcss is a runtime dependency rather than
+    # a dev one, and a postinstall hook builds the CSS. That is deliberate — a
+    # host whose build command is left at the default `npm install` would
+    # otherwise deploy a working server with no stylesheet, which looks like a
+    # success and fails silently.
+    buildCommand: npm ci
+    startCommand: npm start
+
+    # A deploy is only promoted once this reports 200. /api/health returns 503
+    # while the database is unreachable, so a bad DATABASE_URL fails loudly here
+    # instead of shipping a broken build.
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      - key: MAPTILER_STYLE
+        value: streets-v2
+      - key: GEOCODER_PROVIDER
+        value: geoapify
+      - key: ENABLE_FACEBOOK_OAUTH
+        value: 'false'
+      # Pinned off in production: the Google OAuth client does not exist yet, so
+      # a visible button would only ever return "provider is not enabled".
+      - key: ENABLE_GOOGLE_OAUTH
+        value: 'false'
+      - key: DB_POOL_MAX
+        # The free instance has 512 MB RAM and Supabase's pooler has its own
+        # limits; a large pool buys nothing here.
+        value: '5'
+
+      # Prompted on first deploy — never committed.
+      - key: APP_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: DIRECT_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SUPABASE_JWT_SECRET
+        sync: false
+      - key: MAPTILER_KEY
+        sync: false
+      - key: GEOAPIFY_KEY
+        sync: false
+      - key: GEOCODER_USER_AGENT
+        sync: false
