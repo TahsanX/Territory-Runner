@@ -1,0 +1,20 @@
+# App only — Postgres lives on Supabase, so there is no database container to
+# operate, back up, or accidentally destroy on a droplet rebuild.
+services:
+  app:
+    build: .
+    image: territory-runner:latest
+    container_name: territory-runner
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+    # Bound to localhost only: nginx is the sole public entry point.
+    ports:
+      - "127.0.0.1:3000:3000"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
