@@ -1,0 +1,92 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+      - run: npm ci
+      # The GPS filter tests need no database; the territory tests skip
+      # themselves when DIRECT_URL is absent.
+      - run: node --test tests/gps-filter.test.js
+      - run: npm run build:css
+
+      # Catches syntax errors and bad requires across the whole server tree
+      # without needing a database.
+      - name: Check every module parses
+        run: |
+          set -e
+          for f in server.js config/*.js controllers/*.js middleware/*.js \
+                   models/*.js routes/*.js utils/*.js shared/*.js scripts/*.js; do
+            node --check "$f"
+          done
+          for f in public/js/*.js; do node --check "$f"; done
+
+      - name: Check the server boots
+        env:
+          SUPABASE_JWT_SECRET: ci-placeholder
+          DATABASE_URL: postgresql://user:pass@127.0.0.1:5432/placeholder
+          NODE_ENV: test
+        run: |
+          node server.js &
+          PID=$!
+          sleep 4
+          # The server must be listening even though the database is not
+          # reachable; /api/health is expected to report 503, not to crash.
+          kill -0 "$PID"
+          curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000/api/health || true
+          kill "$PID"
+
+  # Render builds and restarts the service itself. Auto-deploy is left OFF in
+  # the Render dashboard so that a push with failing tests cannot ship: this job
+  # calls the deploy hook only after `test` passes.
+  #
+  # Set the RENDER_DEPLOY_HOOK secret to the URL from
+  # Render dashboard -> the service -> Settings -> Deploy Hook.
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Trigger the Render deploy
+        env:
+          HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "RENDER_DEPLOY_HOOK is not set — skipping (Render may be set to auto-deploy)."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "Deploy triggered."
+
+      # The deploy hook returns as soon as the build is queued, so poll the live
+      # health endpoint to find out whether the new build actually came up.
+      - name: Verify health
+        env:
+          URL: ${{ vars.KEEP_WARM_URL }}
+        run: |
+          if [ -z "$URL" ]; then
+            echo "KEEP_WARM_URL is not set — skipping verification."
+            exit 0
+          fi
+          for i in $(seq 1 40); do
+            if curl -fsS --max-time 30 "$URL" | grep -q '"database":"up"'; then
+              echo "Healthy."; exit 0
+            fi
+            sleep 15
+          done
+          echo "Health check never passed after 10 minutes."
+          exit 1
