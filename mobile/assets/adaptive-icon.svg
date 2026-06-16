@@ -1,0 +1,19 @@
+<!-- Android adaptive foreground: mark scaled into the central 66% safe zone. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1024" height="1024">
+  <g fill="#fff" transform="translate(19,19) scale(0.62)">
+    <circle cx="67" cy="21" r="7"/>
+    <path d="M50 30 Q58 27 66 30 L60 52 Q53 54 46 51 Z"/>
+    <path d="M52 31 L42 40 L37 47 L44 42 L55 36 Z"/>
+    <path d="M63 30 L70 42 L84 37 L71 47 Q67 47 65 44 L59 35 Z"/>
+    <path d="M51 49 L60 50 L72 58 Q73 60 72 62 L69 82 L66 62 L52 57 Z"/>
+    <path d="M46 49 L56 52 L46 65 L16 72 L39 60 Z"/>
+    <path d="M43 18.5 L60 17.5 L60 20.5 Z"/>
+    <path d="M35 25 L58 24 L57 27 Z"/>
+    <path d="M24 31 L46 30.5 L45 33.5 Z"/>
+    <path d="M22 38 L39 37.5 L39 40.5 Z"/>
+    <path d="M28 49 L46 48.5 L46 51.5 Z"/>
+    <path d="M20 55 L45 54.5 L44 57.5 Z"/>
+    <path d="M22 62 L39 61.5 L37 64.5 Z"/>
+    <ellipse cx="50" cy="83" rx="33" ry="1.6"/>
+  </g>
+</svg>
