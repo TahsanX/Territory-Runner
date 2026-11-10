@@ -6,6 +6,12 @@ contested and there is always a reason to go out again.
 
 **Live Demo:** https://territory-runner.tahsan.tech/
 
+**Benchmarks (200 territories, Supabase Sydney, 310ms RTT):**
+- **20× fewer DB round trips** for coordinate writes (batched 1,800 fixes → 90 queries)
+- Territory capture: ~50 ms server-side (network-dominated)
+- Viewport query: 10 rows / 1.2 KB (not the whole table)
+- Area integrity: zero drift — single-transaction guarantees
+
 - **GPS tracking** with accuracy filtering, pause support and live pace
 - **Territory capture** on any closed loop, with area measured on the spheroid
 - **Territory stealing** — a newer loop takes 100% of the overlap, resolved
