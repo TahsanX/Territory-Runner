@@ -24,6 +24,10 @@ contested and there is always a reason to go out again.
 | --- | --- |
 | ![Leaderboard](docs/screenshots/leaderboard.png) | ![Leaderboard on a phone](docs/screenshots/leaderboard-mobile.png) |
 
+| Home / Run View | Summary View | Mobile App |
+| --- | --- | --- |
+| ![Home](image1.png) | ![Summary](image2.png) | ![Mobile](image3.png) |
+
 ## Stack
 
 | Layer | Choice | Why |
