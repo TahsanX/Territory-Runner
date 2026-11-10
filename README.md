@@ -6,7 +6,7 @@ contested and there is always a reason to go out again.
 
 **Live Demo:** https://territory-runner.tahsan.tech/
 
-**Mobile App:** https://expo.dev/accounts/tahsan_x0/projects/territory-running-app/builds/c9e4b279-8788-4f22-8ab9-4021a91dfb0d
+[![Download Latest APK](https://img.shields.io/badge/Download-Latest%20APK-blue?style=for-the-badge&logo=android)](https://expo.dev/accounts/tahsan_x0/projects/territory-running-app/builds/c9e4b279-8788-4f22-8ab9-4021a91dfb0d)
 
 **Benchmarks (200 territories, Supabase Sydney, 310ms RTT):**
 - 20× fewer DB round trips (1,800 GPS fixes → 90 batched queries)
