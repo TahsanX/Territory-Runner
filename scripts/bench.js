@@ -10,10 +10,10 @@
  *   - a batched coordinate insert vs. the old one-row-per-request pattern
  *
  * RESULTS (200 territories, Supabase Sydney, 310ms RTT):
- *   ✅ 20× fewer DB round trips for coordinate writes (1,800 fixes → 90 queries)
- *   ✅ Territory capture: ~50 ms server-side (network dominates at ~310 ms)
- *   ✅ Viewport query: 10 rows / 1.2 KB — not the whole table
- *   ✅ Area integrity: ZERO drift — single transaction guarantees consistency
+ *   ✅ 20× fewer DB round trips (1,800 fixes → 90 queries)
+ *   ✅ Territory capture: ~50 ms server-side
+ *   ✅ Viewport query: 10 rows / 1.2 KB
+ *   ✅ Area integrity: zero drift
  *
  *   npm run bench            # default 1000 territories
  *   npm run bench -- 5000

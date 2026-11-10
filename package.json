@@ -1,7 +1,7 @@
 {
   "name": "territory-running-app",
   "version": "2.0.0",
-  "description": "Territory-Based Running and Fitness Tracking Application — PostGIS-powered territory capture with 20× fewer DB round trips, sub-50ms server-side capture, zero stats drift",
+  "description": "Territory-Based Running App — PostGIS-powered capture with 20× fewer DB round trips, sub-50ms server-side capture, zero stats drift",
   "main": "server.js",
   "engines": {
     "node": ">=20"

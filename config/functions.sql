@@ -4,9 +4,8 @@
 -- The whole territory capture, including taking land from every overlapping
 -- owner, is ONE function call in ONE transaction.
 --
--- KEY ACHIEVEMENT: Replaced O(n) in-memory scan (old JS handler) with
--- GiST-indexed PostGIS function — 20× fewer DB round trips for coordinate
--- writes, sub-50ms server-side capture, zero stats drift.
+-- KEY WIN: GiST-indexed PostGIS function replaces O(n) JS in-memory scan
+-- → 20× fewer DB round trips, sub-50ms server-side, zero stats drift.
 --
 -- What the old JS implementation (utils/territoryOverlapHandler.js) got wrong,
 -- and how each is fixed here:
