@@ -4,6 +4,8 @@ A running app where closing a GPS loop captures the ground inside it. Run over
 someone else's territory and the overlap becomes yours — so the map is always
 contested and there is always a reason to go out again.
 
+**Live Demo:** https://territory-runner.tahsan.tech/
+
 - **GPS tracking** with accuracy filtering, pause support and live pace
 - **Territory capture** on any closed loop, with area measured on the spheroid
 - **Territory stealing** — a newer loop takes 100% of the overlap, resolved
